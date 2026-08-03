@@ -19,6 +19,7 @@ let placementPlayer = 0;
 let placementDraft = null;
 let selectedShip = 0;
 let orientation = 'horizontal';
+let placementHistory = [];
 let pendingShot = null;
 let timerId = null;
 let deadline = 0;
@@ -70,7 +71,7 @@ function canPlace(board, row, col, size, direction) {
 }
 function placeShip(board, ship, row, col, direction, id) {
   if (!canPlace(board,row,col,ship.size,direction)) return false;
-  for (let i=0;i<ship.size;i++) { const r=row+(direction==='vertical'?i:0), c=col+(direction==='horizontal'?i:0); board[r][c]={ kind:'ship', id, type:ship.type, name:ship.name, hit:false }; } return true;
+  for (let i=0;i<ship.size;i++) { const r=row+(direction==='vertical'?i:0), c=col+(direction==='horizontal'?i:0); board[r][c]={ kind:'ship', id, type:ship.type, name:ship.name, hit:false, direction, segment:i, size:ship.size }; } return true;
 }
 function randomBoard(treasureCount) {
   const board=emptyBoard();
@@ -88,23 +89,33 @@ function addMissingTreasures(board, treasureCount) {
 }
 
 function beginPlacement(playerIndex) {
-  placementPlayer=playerIndex; placementDraft=emptyBoard(); selectedShip=0; orientation='horizontal';
+  placementPlayer=playerIndex; placementDraft=emptyBoard(); selectedShip=0; orientation='horizontal'; placementHistory=[];
   $('#placementTitle').textContent=`${state.players[playerIndex].name}, monte sua frota`;
   renderShipPicker(); renderPlacementBoard(); showScreen('placementScreen');
 }
 function renderShipPicker() {
-  $('#shipPicker').innerHTML=SHIPS.map((ship,i)=>`<button class="ship-option ${i===selectedShip?'selected':''}" data-index="${i}" ${ship.placed?'disabled':''}>${ship.icon} <b>${ship.name}</b> · ${ship.size} casas</button>`).join('');
-  document.querySelectorAll('.ship-option').forEach(button=>button.addEventListener('click',()=>{selectedShip=Number(button.dataset.index);renderShipPicker();}));
+  const treasurePlaced=placementDraft.flat().filter(item=>item?.kind==='treasure').length;
+  $('#shipPicker').innerHTML=SHIPS.map((ship,i)=>`<button type="button" class="ship-option ${i===selectedShip?'selected':''}" data-index="${i}" ${ship.placed?'disabled':''}>${ship.icon} <b>${ship.name}</b><span class="remaining">${ship.placed?'Pronto':ship.size+' casas'}</span></button>`).join('')+
+    (state.config.treasures?`<button type="button" class="ship-option ${selectedShip==='treasure'?'selected':''}" data-index="treasure" ${treasurePlaced>=state.config.treasures?'disabled':''}>💰 <b>Baú do tesouro</b><span class="remaining">${treasurePlaced}/${state.config.treasures}</span></button>`:'');
+  document.querySelectorAll('.ship-option').forEach(button=>button.addEventListener('click',()=>{selectedShip=button.dataset.index==='treasure'?'treasure':Number(button.dataset.index);renderShipPicker();renderPlacementPreview();}));
+  renderPlacementPreview();
 }
 function boardMarkup(board, reveal=false, attack=false) {
   let html='<div class="axis"></div>'+Array.from({length:10},(_,i)=>`<div class="axis">${i+1}</div>`).join('');
-  for(let r=0;r<10;r++){html+=`<div class="axis">${String.fromCharCode(65+r)}</div>`;for(let c=0;c<10;c++){const item=board[r][c];let cls='cell',label=`${String.fromCharCode(65+r)}${c+1}`;if(reveal&&item)cls+=item.kind==='treasure'?' treasure':' ship';if(attack&&item?.hit)cls+=item.kind==='treasure'?' treasure':item.sunk?' sunk':' hit';else if(attack&&item?.miss)cls+=' miss';html+=`<button class="${cls}" data-row="${r}" data-col="${c}" aria-label="${label}">${attack&&item?.hit?(item.kind==='treasure'?'💰':'💥'):attack&&item?.miss?'•':''}</button>`;}}return html;
+  for(let r=0;r<10;r++){html+=`<div class="axis">${String.fromCharCode(65+r)}</div>`;for(let c=0;c<10;c++){const item=board[r][c];let cls='cell',label=`${String.fromCharCode(65+r)}${c+1}`,content='';if(reveal&&item){cls+=item.kind==='treasure'?' treasure':' ship';content=item.kind==='treasure'?'💰':`<i class="vessel ${item.direction} ${item.segment===0?'first':item.segment===item.size-1?'last':'mid'}"></i>`;}if(attack&&item?.hit){cls+=item.kind==='treasure'?' treasure':item.sunk?' sunk':' hit';content=item.kind==='treasure'?'💰':'💥';}else if(attack&&item?.miss){cls+=' miss';content='•';}html+=`<button class="${cls}" data-row="${r}" data-col="${c}" aria-label="${label}">${content}</button>`;}}return html;
 }
-function renderPlacementBoard(){ $('#placementBoard').innerHTML=boardMarkup(placementDraft,true);document.querySelectorAll('#placementBoard .cell').forEach(cell=>cell.addEventListener('click',()=>manualPlace(Number(cell.dataset.row),Number(cell.dataset.col))));$('#confirmPlacement').disabled=SHIPS.some(s=>!s.placed);$('#rotateButton b').textContent=orientation==='horizontal'?'Horizontal':'Vertical'; }
-function manualPlace(row,col){const ship=SHIPS[selectedShip];if(!ship||ship.placed)return;if(placeShip(placementDraft,ship,row,col,orientation,selectedShip)){ship.placed=true;const next=SHIPS.findIndex(s=>!s.placed);selectedShip=next<0?selectedShip:next;renderShipPicker();renderPlacementBoard();}else $('#placementHint').textContent='Essa peça não cabe aí. Tente outra casa ou gire a frota.';}
-$('#rotateButton').addEventListener('click',()=>{orientation=orientation==='horizontal'?'vertical':'horizontal';renderPlacementBoard();});
-$('#clearButton').addEventListener('click',()=>{SHIPS.forEach(s=>delete s.placed);placementDraft=emptyBoard();selectedShip=0;renderShipPicker();renderPlacementBoard();});
-$('#randomizeButton').addEventListener('click',()=>{placementDraft=randomBoard(state.config.treasures);SHIPS.forEach(s=>s.placed=true);renderShipPicker();renderPlacementBoard();});
+function selectedPiece(){return selectedShip==='treasure'?{name:'Baú do tesouro',size:1,icon:'💰'}:SHIPS[selectedShip];}
+function placementCells(row,col){const piece=selectedPiece();return Array.from({length:piece?.size||0},(_,i)=>[row+(orientation==='vertical'?i:0),col+(orientation==='horizontal'?i:0)]);}
+function renderPlacementPreview(){const piece=selectedPiece();if(!piece)return;$('#shipPreview').className=`ship-preview ${orientation}`;$('#shipPreview').innerHTML=selectedShip==='treasure'?'<span class="mini-treasure">💰</span>':Array.from({length:piece.size},()=>'<i class="mini-segment"></i>').join('');}
+function previewPlacement(row,col){const cells=placementCells(row,col),valid=cells.every(([r,c])=>r<10&&c<10&&!placementDraft[r][c]);cells.forEach(([r,c])=>{const cell=document.querySelector(`#placementBoard .cell[data-row="${r}"][data-col="${c}"]`);cell?.classList.add(valid?'preview-ok':'preview-bad');});}
+function clearPlacementPreview(){document.querySelectorAll('#placementBoard .preview-ok, #placementBoard .preview-bad').forEach(cell=>cell.classList.remove('preview-ok','preview-bad'));}
+function renderPlacementBoard(){ $('#placementBoard').innerHTML=boardMarkup(placementDraft,true);document.querySelectorAll('#placementBoard .cell').forEach(cell=>{const row=Number(cell.dataset.row),col=Number(cell.dataset.col);cell.addEventListener('click',()=>manualPlace(row,col));cell.addEventListener('mouseenter',()=>previewPlacement(row,col));cell.addEventListener('mouseleave',clearPlacementPreview);});const shipsPlaced=SHIPS.filter(s=>s.placed).length,treasuresPlaced=placementDraft.flat().filter(i=>i?.kind==='treasure').length,complete=shipsPlaced===SHIPS.length&&treasuresPlaced===state.config.treasures;$('#confirmPlacement').disabled=!complete;$('#rotateButton').disabled=selectedShip==='treasure';$('#rotateButton b').textContent=orientation==='horizontal'?'Horizontal':'Vertical';$('#undoButton').disabled=!placementHistory.length;$('#placementProgress').textContent=`${shipsPlaced} de ${SHIPS.length} navios · ${treasuresPlaced} de ${state.config.treasures} baús`;$('#placementProgressBar').style.width=`${((shipsPlaced+treasuresPlaced)/(SHIPS.length+state.config.treasures))*100}%`; }
+function manualPlace(row,col){const piece=selectedPiece();if(!piece)return;if(selectedShip==='treasure'){if(placementDraft[row][col])return invalidPlacement();const id=`t${Date.now()}-${row}-${col}`;placementDraft[row][col]={kind:'treasure',id,hit:false};placementHistory.push({kind:'treasure',id});}else{if(piece.placed)return;if(!placeShip(placementDraft,piece,row,col,orientation,selectedShip))return invalidPlacement();piece.placed=true;placementHistory.push({kind:'ship',id:selectedShip});}$('#placementHint').textContent=`${piece.icon} ${piece.name} posicionado!`;const next=SHIPS.findIndex(s=>!s.placed);const treasureCount=placementDraft.flat().filter(i=>i?.kind==='treasure').length;selectedShip=next>=0?next:treasureCount<state.config.treasures?'treasure':selectedShip;renderShipPicker();renderPlacementBoard();}
+function invalidPlacement(){$('#placementHint').textContent='⚠️ Essa peça não cabe aí ou ocupa uma casa usada.';}
+$('#rotateButton').addEventListener('click',()=>{orientation=orientation==='horizontal'?'vertical':'horizontal';renderPlacementPreview();renderPlacementBoard();});
+$('#clearButton').addEventListener('click',()=>{SHIPS.forEach(s=>delete s.placed);placementDraft=emptyBoard();placementHistory=[];selectedShip=0;renderShipPicker();renderPlacementBoard();$('#placementHint').textContent='Tabuleiro limpo. Escolha uma peça para recomeçar.';});
+$('#undoButton').addEventListener('click',()=>{const last=placementHistory.pop();if(!last)return;if(last.kind==='ship'){placementDraft.forEach(row=>row.forEach((item,col)=>{if(item?.kind==='ship'&&item.id===last.id)row[col]=null;}));delete SHIPS[last.id].placed;selectedShip=last.id;}else{placementDraft.forEach(row=>row.forEach((item,col)=>{if(item?.kind==='treasure'&&item.id===last.id)row[col]=null;}));selectedShip='treasure';}renderShipPicker();renderPlacementBoard();$('#placementHint').textContent='Última peça removida.';});
+$('#randomizeButton').addEventListener('click',()=>{placementDraft=randomBoard(state.config.treasures);placementHistory=[];SHIPS.forEach(s=>s.placed=true);selectedShip=state.config.treasures?'treasure':0;renderShipPicker();renderPlacementBoard();$('#placementHint').textContent='Frota distribuída! Você pode confirmar ou limpar para tentar novamente.';});
 $('#confirmPlacement').addEventListener('click',()=>{addMissingTreasures(placementDraft,state.config.treasures);state.players[placementPlayer].board=placementDraft;SHIPS.forEach(s=>delete s.placed);if(state.config.mode==='local'&&placementPlayer===0){$('#handoffTitle').textContent=`Passe para ${state.players[1].name}`;showScreen('handoffScreen');}else startGame();});
 $('#handoffButton').addEventListener('click',()=>beginPlacement(1));
 

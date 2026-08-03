@@ -11,7 +11,10 @@
   <header class="hero">
     <div class="brand-mark" aria-hidden="true">⚓</div>
     <div><p class="eyebrow">MISSÃO MATEMÁTICA</p><h1>Alvo Certo: <span>Tabuada</span></h1><p>Calcule, mire e conquiste os sete mares!</p></div>
-    <button class="icon-button" id="soundButton" aria-label="Ativar ou desativar sons">🔊</button>
+    <div class="header-actions">
+      <a class="print-link" href="folha-impressao.html" target="_blank" rel="noopener">🖨️ Folha impressa</a>
+      <button class="icon-button" id="soundButton" aria-label="Ativar ou desativar sons">🔊</button>
+    </div>
   </header>
 
   <main>
@@ -65,11 +68,14 @@
     <section id="placementScreen" class="screen hidden">
       <div class="card placement-card">
         <div class="section-title"><span>🧭</span><div><p>POSICIONAMENTO SECRETO</p><h2 id="placementTitle">Monte sua frota</h2></div></div>
-        <p id="placementHint">Selecione uma peça, escolha a orientação e clique no tabuleiro.</p>
+        <p id="placementHint">Passe o cursor para visualizar. Clique para posicionar.</p>
         <div class="placement-layout"><div><div id="placementBoard" class="board"></div></div><aside>
+          <div class="placement-progress"><span id="placementProgress">0 de 8 navios</span><div><i id="placementProgressBar"></i></div></div>
+          <div id="shipPreview" class="ship-preview" aria-label="Prévia da peça selecionada"></div>
           <div id="shipPicker" class="ship-picker"></div>
           <button id="rotateButton" class="secondary" type="button">↻ Girar: <b>Horizontal</b></button>
           <button id="randomizeButton" class="secondary" type="button">🎲 Distribuir automaticamente</button>
+          <button id="undoButton" class="secondary" type="button" disabled>↶ Desfazer última peça</button>
           <button id="clearButton" class="text-button" type="button">Limpar tabuleiro</button>
           <button id="confirmPlacement" class="primary" type="button" disabled>Confirmar frota</button>
         </aside></div>

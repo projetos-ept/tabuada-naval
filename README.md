@@ -12,12 +12,23 @@ python3 -m http.server 8000
 
 Depois, acesse `http://localhost:8000`.
 
+## Folha impressa
+
+O botão **Folha impressa**, no cabeçalho do jogo, abre uma página A4 preparada para impressão. Cada aluno recebe uma folha com:
+
+- um tabuleiro principal para posicionar secretamente a própria frota;
+- um radar menor para registrar os disparos contra o adversário;
+- marcações sugeridas de **× para fogo** e **○ para água**;
+- legenda da frota, espaço para pontuação e uma dica estratégica.
+
+Também é possível abrir `folha-impressao.html` diretamente e usar o botão **Imprimir folha**.
+
 ## Modos de partida
 
 - **Contra o computador:** a frota adversária é criada automaticamente. No nível fácil, a máquina atira aleatoriamente; no médio e difícil, procura casas vizinhas depois de um acerto.
 - **Dois jogadores:** os participantes usam o mesmo dispositivo e os mapas permanecem ocultos durante a troca de jogador.
 - **Posicionamento automático:** distribui toda a frota imediatamente.
-- **Posicionamento manual:** permite escolher cada navio, girá-lo e completar a preparação automaticamente.
+- **Posicionamento manual:** permite escolher cada navio e cada baú, visualizar a posição antes de confirmar, girar a peça em tempo real e desfazer enganos.
 
 ## Níveis da tabuada
 
@@ -42,6 +53,8 @@ Cada jogador possui **25 casas de navios**:
 | Tesouro | 0 a 4 | 1 casa | 20 pontos + tiro extra |
 
 Os navios podem ficar na horizontal ou vertical, nunca na diagonal, e não podem se sobrepor. Os tesouros são opcionais e distribuídos em casas livres.
+
+Durante o posicionamento, os navios são desenhados diretamente no mapa. A prévia verde indica uma posição válida e a vermelha avisa que a peça não cabe ou se sobrepõe a outra. Também é possível desfazer a última peça, limpar o mapa ou gerar outra distribuição automática.
 
 ## Rodada
 
