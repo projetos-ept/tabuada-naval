@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alvo Certo: Tabuada — Folha de Jogo</title>
+  <link rel="stylesheet" href="folha-impressao.css">
+</head>
+<body>
+  <div class="toolbar" role="region" aria-label="Controles de impressão">
+    <a href="index.html">← Voltar ao jogo</a>
+    <p>Use uma folha para cada jogador.</p>
+    <button type="button" onclick="window.print()">🖨️ Imprimir folha</button>
+  </div>
+
+  <main class="sheet">
+    <header class="school-header">
+      <div class="monogram">C<br>M<br>M<br>S<br>F</div>
+      <div class="school-fields">
+        <h1>COLÉGIO MUNICIPAL MIGUEL SANTOS FONTES</h1>
+        <div class="fields-row"><span>ANO: <i></i></span><span>DATA: <i></i></span><span>TURNO: <i></i></span></div>
+        <div class="wide-field">NOME: <i></i></div>
+        <div class="fields-row"><span>PROFESSOR: <i></i></span><span>DISCIPLINA: <b>MATEMÁTICA</b></span></div>
+      </div>
+    </header>
+
+    <section class="title-block">
+      <div class="anchor">⚓</div>
+      <div><h2>ALVO CERTO: TABUADA</h2><p>Calcule os produtos, encontre a frota e registre cada pista!</p></div>
+    </section>
+
+    <div class="boards-layout">
+      <section class="own-board-panel">
+        <div class="panel-heading"><span>1</span><div><h3>MEU MAPA SECRETO</h3><p>Desenhe sua frota e os baús. Não mostre ao adversário.</p></div></div>
+        <div class="multiplication-board large-board" data-board aria-label="Meu mapa secreto"></div>
+      </section>
+
+      <aside class="radar-panel">
+        <div class="panel-heading"><span>2</span><div><h3>RADAR DE ATAQUES</h3><p>Registre os tiros feitos contra o outro jogador.</p></div></div>
+        <div class="multiplication-board radar-board" data-board aria-label="Radar de ataques ao adversário"></div>
+        <div class="radar-legend" aria-label="Legenda do radar">
+          <div><i class="mark fire">×</i><span><b>FOGO</b><small>Navio ou tesouro</small></span></div>
+          <div><i class="mark water">○</i><span><b>ÁGUA</b><small>Casa vazia</small></span></div>
+        </div>
+        <div class="strategy-note"><b>🕵️ PISTA DO CAPITÃO</b><p>Observe seus tiros anteriores e investigue as casas vizinhas depois de um acerto.</p></div>
+      </aside>
+    </div>
+
+    <section class="fleet-section">
+      <h3>MINHA FROTA &amp; TESOUROS</h3>
+      <div class="fleet-list">
+        <div><span class="ship-shape five"></span><b>1× Porta-aviões</b><small>5 casas</small></div>
+        <div><span class="ship-shape four"></span><b>2× Encouraçado</b><small>4 casas</small></div>
+        <div><span class="ship-shape three"></span><b>2× Cruzador</b><small>3 casas</small></div>
+        <div><span class="ship-shape two"></span><b>3× Submarino</b><small>2 casas</small></div>
+        <div><span class="treasure-shape">★</span><b>0–4× Tesouro</b><small>20 pts + tiro extra</small></div>
+      </div>
+    </section>
+
+    <section class="score-section">
+      <div class="total-score"><b>TOTAL DE PONTOS</b><span></span></div>
+      <div class="multiplication-log">
+        <h3>REGISTRO DAS TABUADAS DOS ACERTOS <small>Cada resposta correta vale +5 pontos extras</small></h3>
+        <div class="log-grid">
+          <b>TABUADA</b><b>RESPOSTA</b><b>BÔNUS</b>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+          <span>____ × ____ = ____</span><span>____________</span><span>+ 5</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-board]').forEach((board) => {
+      board.insertAdjacentHTML('beforeend', '<span class="corner">×</span>');
+      for (let column = 1; column <= 10; column += 1) board.insertAdjacentHTML('beforeend', `<b class="column-label">${column}</b>`);
+      for (let row = 1; row <= 10; row += 1) {
+        board.insertAdjacentHTML('beforeend', `<b class="row-label">${row}</b>`);
+        for (let column = 1; column <= 10; column += 1) {
+          board.insertAdjacentHTML('beforeend', `<span class="board-cell" aria-label="${row} vezes ${column}"></span>`);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

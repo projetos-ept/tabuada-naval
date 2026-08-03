@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#073b5c">
+  <title>Alvo Certo: Tabuada</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="brand-mark" aria-hidden="true">⚓</div>
+    <div><p class="eyebrow">MISSÃO MATEMÁTICA</p><h1>Alvo Certo: <span>Tabuada</span></h1><p>Calcule, mire e conquiste os sete mares!</p></div>
+    <div class="header-actions">
+      <a class="print-link" href="folha-impressao.html" target="_blank" rel="noopener">🖨️ Folha impressa</a>
+      <button class="icon-button" id="soundButton" aria-label="Ativar ou desativar sons">🔊</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="setupScreen" class="screen setup-grid">
+      <div class="card intro-card">
+        <span class="pill">COMO JOGAR</span>
+        <h2>Atire, acerte e ganhe bônus!</h2>
+        <div class="steps">
+          <div><b>1</b><p><strong>Escolha e atire</strong><br>Água encerra a jogada normalmente.</p></div>
+          <div><b>2</b><p><strong>Acertou? Resolva a tabuada</strong><br>Você tem 10 segundos no digital.</p></div>
+          <div><b>3</b><p><strong>Ganhe +5 pontos</strong><br>Errar não cancela o tiro nem o acerto.</p></div>
+        </div>
+        <div class="fleet-preview" aria-label="Composição da frota">
+          <span>🚢 ×1</span><span>⛴️ ×2</span><span>🛥️ ×2</span><span>🚤 ×3</span><span>💰 ×0–4</span>
+        </div>
+      </div>
+
+      <form id="setupForm" class="card config-card">
+        <div class="section-title"><span>⚙</span><div><p>PREPARE A MISSÃO</p><h2>Configuração da partida</h2></div></div>
+
+        <fieldset><legend>Quem vai jogar?</legend><div class="segmented">
+          <label><input type="radio" name="gameMode" value="cpu" checked><span>🤖 Contra o computador</span></label>
+          <label><input type="radio" name="gameMode" value="local"><span>👥 Dois jogadores</span></label>
+        </div></fieldset>
+
+        <div class="field-row">
+          <label>Nome do capitão<input id="player1Name" maxlength="18" value="Capitão 1" required></label>
+          <label id="player2Field">Adversário<input id="player2Name" maxlength="18" value="Computador" required></label>
+        </div>
+
+        <fieldset><legend>Nível da tabuada</legend><div class="level-grid">
+          <label class="level easy"><input type="radio" name="level" value="easy"><span><b>Fácil</b><small>3 alternativas</small></span></label>
+          <label class="level medium"><input type="radio" name="level" value="medium" checked><span><b>Médio</b><small>5 alternativas</small></span></label>
+          <label class="level hard"><input type="radio" name="level" value="hard"><span><b>Difícil</b><small>Resposta digitada</small></span></label>
+        </div></fieldset>
+
+        <div class="field-row">
+          <label>Posicionamento<select id="placement"><option value="auto">Automático</option><option value="manual">Manual + completar automático</option></select></label>
+          <label>Tesouros<select id="treasures"><option value="0">Nenhum</option><option value="1">1 tesouro</option><option value="2">2 tesouros</option><option value="3">3 tesouros</option><option value="4" selected>4 tesouros</option></select></label>
+        </div>
+
+        <fieldset><legend>Como vencer?</legend><div class="segmented">
+          <label><input type="radio" name="victory" value="fleet" checked><span>💥 Afundar a frota</span></label>
+          <label><input type="radio" name="victory" value="score"><span>🏆 Alcançar pontos</span></label>
+        </div><label id="targetField" class="target-field hidden">Meta de pontos <input id="targetScore" type="number" min="50" step="5" value="150"><small id="scoreHelp"></small></label></fieldset>
+
+        <button class="primary" type="submit">INICIAR MISSÃO <span>➜</span></button>
+      </form>
+    </section>
+
+    <section id="placementScreen" class="screen hidden">
+      <div class="card placement-card">
+        <div class="section-title"><span>🧭</span><div><p>POSICIONAMENTO SECRETO</p><h2 id="placementTitle">Monte sua frota</h2></div></div>
+        <p id="placementHint">Passe o cursor para visualizar. Clique para posicionar.</p>
+        <div class="placement-layout"><div><div id="placementBoard" class="board"></div></div><aside>
+          <div class="placement-progress"><span id="placementProgress">0 de 8 navios</span><div><i id="placementProgressBar"></i></div></div>
+          <div id="shipPreview" class="ship-preview" aria-label="Prévia da peça selecionada"></div>
+          <div id="shipPicker" class="ship-picker"></div>
+          <button id="rotateButton" class="secondary" type="button">↻ Girar: <b>Horizontal</b></button>
+          <button id="randomizeButton" class="secondary" type="button">🎲 Distribuir automaticamente</button>
+          <button id="undoButton" class="secondary" type="button" disabled>↶ Desfazer última peça</button>
+          <button id="clearButton" class="text-button" type="button">Limpar tabuleiro</button>
+          <button id="confirmPlacement" class="primary" type="button" disabled>Confirmar frota</button>
+        </aside></div>
+      </div>
+    </section>
+
+    <section id="handoffScreen" class="screen hidden handoff"><div class="card"><div class="big-icon">🙈</div><p>PASSAGEM DE COMANDO</p><h2 id="handoffTitle">Passe o dispositivo</h2><p>O mapa anterior está protegido. Só continue quando o próximo capitão estiver pronto.</p><button id="handoffButton" class="primary">Estou pronto</button></div></section>
+
+    <section id="gameScreen" class="screen hidden">
+      <div class="status-bar card"><div><small>TURNO DE</small><strong id="turnName">Capitão</strong></div><div class="score"><span id="p1Name">Jogador 1</span><b id="p1Score">0</b><i>×</i><b id="p2Score">0</b><span id="p2Name">Jogador 2</span></div><div><small>OBJETIVO</small><strong id="objective">Afundar a frota</strong></div></div>
+      <div class="game-layout">
+        <section class="card ocean-card"><div class="board-heading"><div><p>MAPA DE ATAQUE</p><h2>Escolha seu alvo</h2></div><span id="bonusBadge" class="bonus hidden">⭐ Tiro extra: 0</span></div><div id="attackBoard" class="board attack-board"></div><p id="gameMessage" class="game-message" role="status">Selecione uma coordenada para atacar.</p></section>
+        <aside class="card dashboard"><h3>Diário de bordo</h3><div class="stat"><span>🎯 Acertos</span><b id="hitsStat">0</b></div><div class="stat"><span>🌊 Água</span><b id="missesStat">0</b></div><div class="stat"><span>🧠 Bônus de tabuada</span><b id="correctStat">0</b></div><div class="stat"><span>⌛ Sem bônus</span><b id="wrongStat">0</b></div><hr><h3>Frota inimiga</h3><div id="enemyFleet" class="enemy-fleet"></div><hr><h3>Últimas jogadas</h3><ol id="history" class="history"></ol></aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="challengeDialog" class="challenge"><form method="dialog"><div class="timer"><span id="timerNumber">10</span><div><p>10 SEGUNDOS PARA GANHAR +5</p><div class="timer-track"><i id="timerBar"></i></div></div></div><p>Acertou o alvo! Quanto é:</p><h2 id="question">6 × 7 = ?</h2><div id="answerArea"></div><p id="answerFeedback" role="alert"></p></form></dialog>
+  <dialog id="resultDialog" class="result"><div class="result-icon">🏆</div><p>MISSÃO CUMPRIDA</p><h2 id="winnerTitle">Vitória!</h2><p id="winnerText"></p><div id="finalStats" class="final-stats"></div><button id="playAgain" class="primary">Jogar novamente</button></dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

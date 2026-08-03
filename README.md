@@ -1,74 +1,84 @@
-Aqui está o roteiro completo da atividade para você apresentar aos alunos, explicar as regras e aplicar na sala de aula:
+# ⚓ Alvo Certo: Tabuada
 
----
+Jogo de batalha naval educativo para praticar multiplicação. Antes de cada disparo, o jogador tem **10 segundos** para resolver a conta formada pela linha e pela coluna escolhidas.
 
-## ⚓ Roteiro do Jogo: Alvo Certo – Tabuada
+## Como executar
 
-### 📋 Visão Geral
+Não é necessário instalar dependências. Abra `index.html` diretamente no navegador ou inicie um servidor local:
 
-* **Objetivo Geral:** Exercitar a tabuada de forma estratégica, acertando os cruzamentos das linhas e colunas para encontrar e "afundar" a frota inimiga e descobrir baús do tesouro.
-* **Modo de Jogo:** Em Duplas (Jogador A vs. Jogador B).
-* **Condição de Vitória:** O primeiro jogador a alcançar **150 pontos** vence a partida!
+```bash
+python3 -m http.server 8000
+```
 
----
+Depois, acesse `http://localhost:8000`.
 
-## 🛠️ Preparação da Partida
+## Folha impressa
 
-1. **Material:** Cada aluno recebe uma folha da atividade **"Alvo Certo: Tabuada"**.
-2. **Posicionamento Secreto:**
-* Em segredo (sem mostrar ao adversário), cada jogador desenha sua frota e seus baús no grid.
-* **Sua Frota & Tesouros (27 casas no total):**
-* 1 Porta-Aviões (5 casas seguidas) $\rightarrow$ *Vale 5 pts por casa*
-* 2 Encouraçados (4 casas seguidas cada) $\rightarrow$ *Vale 10 pts por casa*
-* 2 Cruzadores (3 casas seguidas cada) $\rightarrow$ *Vale 10 pts por casa*
-* 3 Submarinos (2 casas seguidas cada) $\rightarrow$ *Vale 10 pts por casa*
-* 4 Baús do Tesouro (1 casa cada) $\rightarrow$ *Vale 20 pts cada*
+O botão **Folha impressa**, no cabeçalho do jogo, abre uma página A4 preparada para impressão. Cada aluno recebe uma folha com:
 
+- um tabuleiro principal para posicionar secretamente a própria frota;
+- um radar menor para registrar os disparos contra o adversário;
+- marcações sugeridas de **× para fogo** e **○ para água**;
+- um retângulo horizontal para a pontuação total;
+- uma tabela para registrar as tabuadas dos acertos e seus bônus de 5 pontos;
+- legenda da frota e uma dica estratégica.
 
-* Os barcos podem ser posicionados na horizontal ou vertical (nunca na diagonal).
+Também é possível abrir `folha-impressao.html` diretamente e usar o botão **Imprimir folha**.
 
+## Modos de partida
 
+- **Contra o computador:** a frota adversária é criada automaticamente. No nível fácil, a máquina atira aleatoriamente; no médio e difícil, procura casas vizinhas depois de um acerto.
+- **Dois jogadores:** os participantes usam o mesmo dispositivo e os mapas permanecem ocultos durante a troca de jogador.
+- **Posicionamento automático:** distribui toda a frota imediatamente.
+- **Posicionamento manual:** permite escolher cada navio e cada baú, visualizar a posição antes de confirmar, girar a peça em tempo real e desfazer enganos.
 
----
+## Níveis da tabuada
 
-## 🎮 Regras e Passo a Passo das Rodadas
+| Nível | Forma de responder |
+| --- | --- |
+| Fácil | Escolher a resposta correta entre 3 alternativas |
+| Médio | Escolher a resposta correta entre 5 alternativas |
+| Difícil | Digitar o resultado da multiplicação |
 
-### 1. Chamada do Tiro
+No jogo digital, a tabuada aparece somente depois de um acerto. O jogador tem 10 segundos para ganhar 5 pontos extras; errar ou deixar o tempo acabar não cancela o tiro nem os pontos do alvo.
 
-Na sua vez, o jogador escolhe uma coordenada e deve **dizer a multiplicação e o resultado** em voz alta.
+## Frota e tesouros
 
-> **Exemplo:** *"Tiro na Linha 6, Coluna 7! 6 vezes 7 é igual a 42!"*
+Cada jogador possui **25 casas de navios**:
 
-* ⚠️ **Regra de Ouro da Tabuada:** Se o jogador errar o resultado da multiplicação, a jogada é anulada imediatamente (o tiro vai "na água"), mesmo que houvesse um barco naquela coordenada!
+| Elemento | Quantidade | Tamanho | Pontuação |
+| --- | ---: | ---: | ---: |
+| Porta-aviões | 1 | 5 casas | 5 pontos por casa |
+| Encouraçado | 2 | 4 casas | 5 pontos por casa |
+| Cruzador | 2 | 3 casas | 5 pontos por casa |
+| Submarino | 3 | 2 casas | 5 pontos por casa |
+| Tesouro | 0 a 4 | 1 casa | 20 pontos + tiro extra |
 
-### 2. Verificação do Alvo
+Os navios podem ficar na horizontal ou vertical, nunca na diagonal, e não podem se sobrepor. Os tesouros são opcionais e distribuídos em casas livres.
 
-O adversário confere no seu mapa secreto e responde:
+Durante o posicionamento, os navios são desenhados diretamente no mapa. A prévia verde indica uma posição válida e a vermelha avisa que a peça não cabe ou se sobrepõe a outra. Também é possível desfazer a última peça, limpar o mapa ou gerar outra distribuição automática.
 
-* **"ÁGUA!"** $\rightarrow$ Se não houver nada naquela casa (0 pontos).
-* **"ACERTOU!"** $\rightarrow$ Se atingiu um barco (marca os pontos daquela casa).
-* **"TESOURO!"** $\rightarrow$ Se encontrou um Baú do Tesouro (**+20 pontos** e ganha **1 tiro bônus** imediato!).
-* **"AFUNDOU!"** $\rightarrow$ Quando a última casa de um barco é atingida.
+## Rodada
 
-### 3. Registro no Papel
+1. O jogador escolhe uma coordenada ainda não atacada e o disparo acontece imediatamente.
+2. Um disparo na água passa a vez, exceto quando ainda houver tiro extra disponível, e não exige resposta de tabuada.
+3. Ao acertar um navio, o jogador marca 5 pontos e continua jogando.
+4. Ao encontrar um tesouro, o jogador marca 20 pontos e recebe um tiro extra, acumulado com a continuação normal do turno.
+5. Depois de um acerto, a linha e a coluna formam uma multiplicação. Por exemplo, linha 6 e coluna 7 representam `6 × 7`.
+6. Uma resposta correta acrescenta 5 pontos. Uma resposta errada mantém o tiro e a pontuação que o alvo já concedeu.
+7. Apenas no jogo digital há limite de 10 segundos para conquistar o bônus da tabuada; na folha impressa, os participantes registram as contas sem cronômetro obrigatório.
 
-* Ambos marcam o tiro em suas folhas (ex: **X** para acerto/tesouro e **O** para água) e atualizam o placar de pontos.
+## Condições de vitória
 
----
+A configuração inicial oferece duas opções:
 
-## 🏆 Tabela de Pontuação Rápida
+- **Afundar a frota:** vence quem atingir as 25 casas de navios do adversário. Os tesouros podem ser desativados.
+- **Alcançar pontos:** vence quem primeiro atingir a meta configurada, a partir de **50 pontos**.
 
-| Elemento | Tamanho | Pontuação |
-| --- | --- | --- |
-| **Água** | 1 casa | **0 pts** |
-| **Porta-Aviões** | 5 casas | **5 pts** por casa hit |
-| **Encouraçado** | 4 casas | **10 pts** por casa hit |
-| **Cruzador** | 3 casas | **10 pts** por casa hit |
-| **Submarino** | 2 casas | **10 pts** por casa hit |
-| **Baú do Tesouro** | 1 casa | **20 pts** + Tiro Bônus |
+A aplicação calcula e valida o limite máximo alcançável. A frota vale 125 pontos, pode render mais 125 em tabuadas, e cada tesouro pode valer 20 pontos mais 5 de bônus. Assim, o máximo varia entre **250 pontos sem tesouros** e **350 pontos com quatro tesouros**.
 
----
+## Tecnologias
 
-## 🏅 Fim de Jogo
-
-A partida encerra imediatamente no momento em que um dos jogadores somar **150 pontos** no seu placar!
+- HTML semântico;
+- CSS responsivo, com suporte a movimento reduzido;
+- JavaScript puro, sem bibliotecas externas.
