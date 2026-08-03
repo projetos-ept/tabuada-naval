@@ -19,7 +19,9 @@ O botão **Folha impressa**, no cabeçalho do jogo, abre uma página A4 preparad
 - um tabuleiro principal para posicionar secretamente a própria frota;
 - um radar menor para registrar os disparos contra o adversário;
 - marcações sugeridas de **× para fogo** e **○ para água**;
-- legenda da frota, espaço para pontuação e uma dica estratégica.
+- um retângulo horizontal para a pontuação total;
+- uma tabela para registrar as tabuadas dos acertos e seus bônus de 5 pontos;
+- legenda da frota e uma dica estratégica.
 
 Também é possível abrir `folha-impressao.html` diretamente e usar o botão **Imprimir folha**.
 
@@ -38,7 +40,7 @@ Também é possível abrir `folha-impressao.html` diretamente e usar o botão **
 | Médio | Escolher a resposta correta entre 5 alternativas |
 | Difícil | Digitar o resultado da multiplicação |
 
-Em todos os níveis, uma resposta incorreta ou o fim dos 10 segundos cancela o tiro e passa a vez.
+No jogo digital, a tabuada aparece somente depois de um acerto. O jogador tem 10 segundos para ganhar 5 pontos extras; errar ou deixar o tempo acabar não cancela o tiro nem os pontos do alvo.
 
 ## Frota e tesouros
 
@@ -58,12 +60,13 @@ Durante o posicionamento, os navios são desenhados diretamente no mapa. A prév
 
 ## Rodada
 
-1. O jogador escolhe uma coordenada ainda não atacada.
-2. A linha e a coluna formam uma multiplicação. Por exemplo, linha 6 e coluna 7 representam `6 × 7`.
-3. Uma resposta correta autoriza o disparo. Uma resposta errada ou atrasada encerra a vez sem disparar.
-4. Ao acertar um navio, o jogador marca 5 pontos e continua jogando.
-5. Ao encontrar um tesouro, o jogador marca 20 pontos e recebe um tiro extra, acumulado com a continuação normal do turno.
-6. Um disparo na água passa a vez, exceto quando ainda houver tiro extra disponível.
+1. O jogador escolhe uma coordenada ainda não atacada e o disparo acontece imediatamente.
+2. Um disparo na água passa a vez, exceto quando ainda houver tiro extra disponível, e não exige resposta de tabuada.
+3. Ao acertar um navio, o jogador marca 5 pontos e continua jogando.
+4. Ao encontrar um tesouro, o jogador marca 20 pontos e recebe um tiro extra, acumulado com a continuação normal do turno.
+5. Depois de um acerto, a linha e a coluna formam uma multiplicação. Por exemplo, linha 6 e coluna 7 representam `6 × 7`.
+6. Uma resposta correta acrescenta 5 pontos. Uma resposta errada mantém o tiro e a pontuação que o alvo já concedeu.
+7. Apenas no jogo digital há limite de 10 segundos para conquistar o bônus da tabuada; na folha impressa, os participantes registram as contas sem cronômetro obrigatório.
 
 ## Condições de vitória
 
@@ -72,7 +75,7 @@ A configuração inicial oferece duas opções:
 - **Afundar a frota:** vence quem atingir as 25 casas de navios do adversário. Os tesouros podem ser desativados.
 - **Alcançar pontos:** vence quem primeiro atingir a meta configurada, a partir de **50 pontos**.
 
-A aplicação calcula e valida o limite máximo alcançável. A frota vale 125 pontos e cada tesouro acrescenta 20, portanto o máximo varia entre **125 pontos sem tesouros** e **205 pontos com quatro tesouros**.
+A aplicação calcula e valida o limite máximo alcançável. A frota vale 125 pontos, pode render mais 125 em tabuadas, e cada tesouro pode valer 20 pontos mais 5 de bônus. Assim, o máximo varia entre **250 pontos sem tesouros** e **350 pontos com quatro tesouros**.
 
 ## Tecnologias
 

@@ -21,11 +21,11 @@
     <section id="setupScreen" class="screen setup-grid">
       <div class="card intro-card">
         <span class="pill">COMO JOGAR</span>
-        <h2>Todo tiro começa com uma conta.</h2>
+        <h2>Atire, acerte e ganhe bônus!</h2>
         <div class="steps">
-          <div><b>1</b><p><strong>Escolha uma coordenada</strong><br>Ela forma a multiplicação.</p></div>
-          <div><b>2</b><p><strong>Responda em 10 segundos</strong><br>Errou? Você perde a vez.</p></div>
-          <div><b>3</b><p><strong>Acerte e jogue de novo</strong><br>Tesouros ainda dão tiro extra.</p></div>
+          <div><b>1</b><p><strong>Escolha e atire</strong><br>Água encerra a jogada normalmente.</p></div>
+          <div><b>2</b><p><strong>Acertou? Resolva a tabuada</strong><br>Você tem 10 segundos no digital.</p></div>
+          <div><b>3</b><p><strong>Ganhe +5 pontos</strong><br>Errar não cancela o tiro nem o acerto.</p></div>
         </div>
         <div class="fleet-preview" aria-label="Composição da frota">
           <span>🚢 ×1</span><span>⛴️ ×2</span><span>🛥️ ×2</span><span>🚤 ×3</span><span>💰 ×0–4</span>
@@ -88,12 +88,12 @@
       <div class="status-bar card"><div><small>TURNO DE</small><strong id="turnName">Capitão</strong></div><div class="score"><span id="p1Name">Jogador 1</span><b id="p1Score">0</b><i>×</i><b id="p2Score">0</b><span id="p2Name">Jogador 2</span></div><div><small>OBJETIVO</small><strong id="objective">Afundar a frota</strong></div></div>
       <div class="game-layout">
         <section class="card ocean-card"><div class="board-heading"><div><p>MAPA DE ATAQUE</p><h2>Escolha seu alvo</h2></div><span id="bonusBadge" class="bonus hidden">⭐ Tiro extra: 0</span></div><div id="attackBoard" class="board attack-board"></div><p id="gameMessage" class="game-message" role="status">Selecione uma coordenada para atacar.</p></section>
-        <aside class="card dashboard"><h3>Diário de bordo</h3><div class="stat"><span>🎯 Acertos</span><b id="hitsStat">0</b></div><div class="stat"><span>🌊 Água</span><b id="missesStat">0</b></div><div class="stat"><span>🧠 Contas certas</span><b id="correctStat">0</b></div><div class="stat"><span>⌛ Erros/tempo</span><b id="wrongStat">0</b></div><hr><h3>Frota inimiga</h3><div id="enemyFleet" class="enemy-fleet"></div><hr><h3>Últimas jogadas</h3><ol id="history" class="history"></ol></aside>
+        <aside class="card dashboard"><h3>Diário de bordo</h3><div class="stat"><span>🎯 Acertos</span><b id="hitsStat">0</b></div><div class="stat"><span>🌊 Água</span><b id="missesStat">0</b></div><div class="stat"><span>🧠 Bônus de tabuada</span><b id="correctStat">0</b></div><div class="stat"><span>⌛ Sem bônus</span><b id="wrongStat">0</b></div><hr><h3>Frota inimiga</h3><div id="enemyFleet" class="enemy-fleet"></div><hr><h3>Últimas jogadas</h3><ol id="history" class="history"></ol></aside>
       </div>
     </section>
   </main>
 
-  <dialog id="challengeDialog" class="challenge"><form method="dialog"><div class="timer"><span id="timerNumber">10</span><div><p>TEMPO PARA RESPONDER</p><div class="timer-track"><i id="timerBar"></i></div></div></div><p>Quanto é:</p><h2 id="question">6 × 7 = ?</h2><div id="answerArea"></div><p id="answerFeedback" role="alert"></p></form></dialog>
+  <dialog id="challengeDialog" class="challenge"><form method="dialog"><div class="timer"><span id="timerNumber">10</span><div><p>10 SEGUNDOS PARA GANHAR +5</p><div class="timer-track"><i id="timerBar"></i></div></div></div><p>Acertou o alvo! Quanto é:</p><h2 id="question">6 × 7 = ?</h2><div id="answerArea"></div><p id="answerFeedback" role="alert"></p></form></dialog>
   <dialog id="resultDialog" class="result"><div class="result-icon">🏆</div><p>MISSÃO CUMPRIDA</p><h2 id="winnerTitle">Vitória!</h2><p id="winnerText"></p><div id="finalStats" class="final-stats"></div><button id="playAgain" class="primary">Jogar novamente</button></dialog>
 
   <script src="script.js"></script>
