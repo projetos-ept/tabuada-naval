@@ -12,6 +12,17 @@ python3 -m http.server 8000
 
 Depois, acesse `http://localhost:8000`.
 
+## Folha impressa
+
+O botão **Folha impressa**, no cabeçalho do jogo, abre uma página A4 preparada para impressão. Cada aluno recebe uma folha com:
+
+- um tabuleiro principal para posicionar secretamente a própria frota;
+- um radar menor para registrar os disparos contra o adversário;
+- marcações sugeridas de **× para fogo** e **○ para água**;
+- legenda da frota, espaço para pontuação e uma dica estratégica.
+
+Também é possível abrir `folha-impressao.html` diretamente e usar o botão **Imprimir folha**.
+
 ## Modos de partida
 
 - **Contra o computador:** a frota adversária é criada automaticamente. No nível fácil, a máquina atira aleatoriamente; no médio e difícil, procura casas vizinhas depois de um acerto.
